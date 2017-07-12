@@ -542,7 +542,7 @@ where constraint_type = 'PRIMARY KEY' AND c.table_schema = '${this.schemaName}' 
         // update sequence generation
         if (oldColumn.isGenerated !== newColumn.isGenerated) {
             if (!oldColumn.isGenerated && newColumn.type !== "uuid") {
-                await this.query(`CREATE SEQUENCE "${tableSchema.name}_id_seq" OWNED BY "${tableSchema.name}"."${oldColumn.name}"`);
+                await this.query(`CREATE SEQUENCE IF NOT EXISTS "${tableSchema.name}_id_seq" OWNED BY "${tableSchema.name}"."${oldColumn.name}"`);
                 await this.query(`ALTER TABLE "${tableSchema.name}" ALTER COLUMN "${oldColumn.name}" SET DEFAULT nextval('"${tableSchema.name}_id_seq"')`);
             } else {
                 await this.query(`ALTER TABLE "${tableSchema.name}" ALTER COLUMN "${oldColumn.name}" DROP DEFAULT`);
